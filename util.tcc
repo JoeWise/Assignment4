@@ -58,12 +58,12 @@ item_t from_string (const string& that) {
 template <typename type>
 string demangle (const type& object) {
    const char* const name = typeid (object).name();
-   int status; 
+   int status;
    char* demangled = abi::__cxa_demangle (name, NULL, 0,& status);
    if (status != 0 or demangled == NULL) return name;
    string result = demangled;
    free (demangled);
-   return result; 
+   return result;
 }
 
 #else
