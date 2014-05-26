@@ -19,6 +19,8 @@ class object {
       rgbcolor color;
    public:
       // Default copiers, movers, dtor all OK.
+      object(const shared_ptr<shape>& shape, vertex& where, rgbcolor color):
+         pshape(shape), center(where), color(color) {}
       void draw() { pshape->draw (center, color); }
       void move (GLfloat delta_x, GLfloat delta_y) {
          center.xpos += delta_x;

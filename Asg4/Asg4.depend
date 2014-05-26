@@ -1,0 +1,51 @@
+# depslib dependency file v1.0
+1401022831 source:c:\users\joeth_000\desktop\109\asg 4-2\debug.cpp
+	<cassert>
+	<climits>
+	<iostream>
+	<vector>
+	"debug.h"
+	"util.h"
+
+1401022835 c:\users\joeth_000\desktop\109\asg 4-2\debug.h
+	<string>
+	<vector>
+
+1401022884 c:\users\joeth_000\desktop\109\asg 4-2\util.h
+	<iostream>
+	<sstream>
+	<stdexcept>
+	<string>
+	<vector>
+	"debug.h"
+	"util.tcc"
+
+1401084427 c:\users\joeth_000\desktop\109\asg 4-2\util.tcc
+	<cxxabi.h>
+
+1401022839 source:c:\users\joeth_000\desktop\109\asg 4-2\graphics.cpp
+	<iostream>
+	<GL/freeglut.h>
+	"graphics.h"
+	"util.h"
+
+1401085178 c:\users\joeth_000\desktop\109\asg 4-2\graphics.h
+	<memory>
+	<vector>
+	<GL/freeglut.h>
+	"rgbcolor.h"
+	"shape.h"
+
+1401022870 c:\users\joeth_000\desktop\109\asg 4-2\rgbcolor.h
+	<string>
+	<unordered_map>
+	<GL/freeglut.h>
+
+1401022877 c:\users\joeth_000\desktop\109\asg 4-2\shape.h
+	<iomanip>
+	<iostream>
+	<memory>
+	<utility>
+	<vector>
+	"rgbcolor.h"
+
