@@ -53,15 +53,15 @@ void interpreter::do_define (param begin, param end) {
 
 void interpreter::do_draw (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   if (end - begin != 3) throw runtime_error ("syntax error");
-   string name (begin[0]);
+   if (end - begin != 4) throw runtime_error ("syntax error");
+   string name (begin[1]);
    shape_map::const_iterator itor = objmap.find (name);
    if (itor == objmap.end()) {
       throw runtime_error (name + ": no such shape");
    }
-   vertex where {from_string<GLfloat> (begin[1]),
-                 from_string<GLfloat> (begin[2])};
-   rgbcolor color (begin[3]);
+   vertex where {from_string<GLfloat> (begin[2]),
+                 from_string<GLfloat> (begin[3])};
+   rgbcolor color (begin[0]);
    object new_shape(itor->second, where, color);
    window::push_back(new_shape);
 }
