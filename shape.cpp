@@ -58,6 +58,25 @@ polygon::polygon (const vertex_list& vertices): vertices(vertices) {
 rectangle::rectangle (GLfloat width, GLfloat height):
             polygon({}) {
    DEBUGF ('c', this << "(" << width << "," << height << ")");
+   vertex v1;
+   v1.xpos=0;
+   v1.ypos=0;
+   vertices.push_back(v1);
+
+   vertex v2;
+   v1.xpos=width;
+   v1.ypos=0;
+   vertices.push_back(v2);
+
+   vertex v3;
+   v1.xpos=width;
+   v1.ypos=height;
+   vertices.push_back(v3);
+
+   vertex v4;
+   v1.xpos=0;
+   v1.ypos=height;
+   vertices.push_back(v4);
 }
 
 square::square (GLfloat width): rectangle (width, width) {
@@ -72,8 +91,19 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
 }
 
-void polygon::draw (const vertex& center, const rgbcolor& color) const {
+void polygon::draw (const vertex& center, const rgbcolor& color) const{
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+
+   //tell GL we're gonna start drawing a polygon
+   glBegin(GL_POLYGON);
+
+   for(size_t i=0; i<vertices.size(); ++i)
+   {
+       glColor3d(color.rgbcolor.red, color.rgbcolor.green, color.rgbcolor.blue);
+       glVertex2f(vertices[i].xpos+center.xpos, vertices[i].ypos+center.ypos);
+   }
+
+   glEnd();
 }
 
 void shape::show (ostream& out) const {
