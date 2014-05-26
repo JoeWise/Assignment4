@@ -2,6 +2,7 @@
 
 #include <typeinfo>
 #include <unordered_map>
+#include <cmath>
 using namespace std;
 
 #include "shape.h"
@@ -51,10 +52,6 @@ circle::circle (GLfloat diameter): ellipse (diameter, diameter) {
 }
 
 
-polygon::polygon (const vertex_list& vertices): vertices(vertices) {
-   DEBUGF ('c', this);
-}
-
 rectangle::rectangle (GLfloat width, GLfloat height):
             polygon({}) {
    DEBUGF ('c', this << "(" << width << "," << height << ")");
@@ -64,23 +61,114 @@ rectangle::rectangle (GLfloat width, GLfloat height):
    vertices.push_back(v1);
 
    vertex v2;
-   v1.xpos=width;
-   v1.ypos=0;
+   v2.xpos=width;
+   v2.ypos=0;
    vertices.push_back(v2);
 
    vertex v3;
-   v1.xpos=width;
-   v1.ypos=height;
+   v3.xpos=width;
+   v3.ypos=height;
    vertices.push_back(v3);
 
    vertex v4;
-   v1.xpos=0;
-   v1.ypos=height;
+   v4.xpos=0;
+   v4.ypos=height;
    vertices.push_back(v4);
 }
 
 square::square (GLfloat width): rectangle (width, width) {
    DEBUGF ('c', this);
+}
+
+diamond::diamond (GLfloat width, GLfloat height):
+            polygon({}) {
+   DEBUGF ('c', this << "(" << width << "," << height << ")");
+   vertex v1;
+   v1.xpos=0;
+   v1.ypos=height / 2;
+   vertices.push_back(v1);
+
+   vertex v2;
+   v2.xpos=width/2;
+   v2.ypos=0;
+   vertices.push_back(v2);
+
+   vertex v3;
+   v3.xpos=width;
+   v3.ypos=height/2;
+   vertices.push_back(v3);
+
+   vertex v4;
+   v4.xpos=width/2;
+   v4.ypos=height;
+   vertices.push_back(v4);
+}
+
+polygon::polygon (const vertex_list& vertices): vertices(vertices) {
+   DEBUGF ('c', this);
+}
+
+triangle::triangle (const vertex_list& vertices):
+            polygon({}) {
+   DEBUGF ('c', this);
+   this->vertices = vertices;
+}
+
+right_triangle::right_triangle (GLfloat width, GLfloat height):
+            triangle({}) {
+   DEBUGF ('c', this << "(" << width << "," << height << ")");
+   vertex v1;
+   v1.xpos=0;
+   v1.ypos=0;
+   vertices.push_back(v1);
+
+   vertex v2;
+   v2.xpos=width;
+   v2.ypos=0;
+   vertices.push_back(v2);
+
+   vertex v3;
+   v3.xpos=0;
+   v3.ypos=height;
+   vertices.push_back(v3);
+}
+
+isosceles::isosceles (GLfloat width, GLfloat height):
+            triangle({}) {
+   DEBUGF ('c', this << "(" << width << "," << height << ")");
+   vertex v1;
+   v1.xpos=0;
+   v1.ypos=0;
+   vertices.push_back(v1);
+
+   vertex v2;
+   v2.xpos=width/2;
+   v2.ypos=height;
+   vertices.push_back(v2);
+
+   vertex v3;
+   v3.xpos=width;
+   v3.ypos=0;
+   vertices.push_back(v3);
+}
+
+equilateral::equilateral (GLfloat width):
+            triangle({}) {
+   DEBUGF ('c', this);
+   vertex v1;
+   v1.xpos=0;
+   v1.ypos=0;
+   vertices.push_back(v1);
+
+   vertex v2;
+   v2.xpos=width/2;
+   v2.ypos=sqrt(pow(width,2)+pow(width/2,2));
+   vertices.push_back(v2);
+
+   vertex v3;
+   v3.xpos=width;
+   v3.ypos=0;
+   vertices.push_back(v3);
 }
 
 void text::draw (const vertex& center, const rgbcolor& color) const {
@@ -99,11 +187,14 @@ void polygon::draw (const vertex& center, const rgbcolor& color) const{
 
    for(size_t i=0; i<vertices.size(); ++i)
    {
-       glColor3d(color.rgbcolor.red, color.rgbcolor.green, color.rgbcolor.blue);
-       glVertex2f(vertices[i].xpos+center.xpos, vertices[i].ypos+center.ypos);
+      glColor3d(color.ubvec[0], color.ubvec[1], color.ubvec[2]);
+      glVertex2f(vertices[i].xpos+center.xpos,
+               vertices[i].ypos+center.ypos);
    }
 
+
    glEnd();
+
 }
 
 void shape::show (ostream& out) const {

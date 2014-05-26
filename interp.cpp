@@ -25,6 +25,11 @@ map<string,interpreter::factoryfn> interpreter::factory_map {
    {"polygon"  , &interpreter::make_polygon  },
    {"rectangle", &interpreter::make_rectangle},
    {"square"   , &interpreter::make_square   },
+   {"diamond"  , &interpreter::make_diamond  },
+   {"triangle" , &interpreter::make_triangle },
+   {"right_triangle" , &interpreter::make_right_triangle },
+   {"isosceles", &interpreter::make_isosceles},
+   {"equilateral", &interpreter::make_equilateral},
 };
 
 interpreter::~interpreter() {
@@ -94,16 +99,77 @@ shape_ptr interpreter::make_circle (param begin, param end) {
 
 shape_ptr interpreter::make_polygon (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<polygon> (vertex_list());
+   vertex_list vertices;
+   int count = 1;
+   vertex v;
+   for (auto iter = begin; iter != end; ++iter){
+      if (count % 2 == 1)
+         v.xpos = stof(*iter);
+      else{
+         v.ypos = stof(*iter);
+         vertices.push_back(v);
+      }
+   }
+
+   return make_shared<polygon> (vertices);
 }
 
 shape_ptr interpreter::make_rectangle (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<rectangle> (GLfloat(), GLfloat());
+   auto iter = begin;
+   float width = stof(*iter++);
+   float height = stof(*iter);
+   return make_shared<rectangle> (GLfloat(width), GLfloat(height));
 }
 
 shape_ptr interpreter::make_square (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<square> (GLfloat());
+   return make_shared<square> (GLfloat(stof(*begin)));
+}
+
+shape_ptr interpreter::make_diamond (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   auto iter = begin;
+   float width = stof(*iter++);
+   float height = stof(*iter);
+   return make_shared<diamond> (GLfloat(width), GLfloat(height));
+}
+
+shape_ptr interpreter::make_triangle (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   vertex_list vertices;
+   int count = 1;
+   vertex v;
+   for (auto iter = begin; iter != end; ++iter){
+      if (count % 2 == 1)
+         v.xpos = stof(*iter);
+      else{
+         v.ypos = stof(*iter);
+         vertices.push_back(v);
+      }
+   }
+
+   return make_shared<triangle> (vertices);
+}
+
+shape_ptr interpreter::make_right_triangle (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   auto iter = begin;
+   float width = stof(*iter++);
+   float height = stof(*iter);
+   return make_shared<right_triangle> (GLfloat(width), GLfloat(height));
+}
+
+shape_ptr interpreter::make_isosceles (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   auto iter = begin;
+   float width = stof(*iter++);
+   float height = stof(*iter);
+   return make_shared<isosceles> (GLfloat(width), GLfloat(height));
+}
+
+shape_ptr interpreter::make_equilateral (param begin, param end) {
+   DEBUGF ('f', range (begin, end));
+   return make_shared<equilateral> (GLfloat(stof(*begin)));
 }
 

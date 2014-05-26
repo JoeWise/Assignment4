@@ -34,7 +34,7 @@ using namespace std;
 class shape;
 typedef struct {GLfloat xpos; GLfloat ypos; } vertex;
 typedef vector<vertex> vertex_list;
-typedef shared_ptr<shape> shape_ptr; 
+typedef shared_ptr<shape> shape_ptr;
 
 //
 // Abstract base class for all shapes in this system.
@@ -67,7 +67,7 @@ class text: public shape {
       // GLUT_BITMAP_9_BY_15
       // GLUT_BITMAP_HELVETICA_10
       // GLUT_BITMAP_HELVETICA_12
-      // GLUT_BITMAP_HELVETICA_18 
+      // GLUT_BITMAP_HELVETICA_18
       // GLUT_BITMAP_TIMES_ROMAN_10
       // GLUT_BITMAP_TIMES_ROMAN_24
       string textdata;
@@ -101,7 +101,7 @@ class circle: public ellipse {
 
 class polygon: public shape {
    protected:
-      const vertex_list vertices;
+      vertex_list vertices;
    public:
       polygon (const vertex_list& vertices);
       virtual void draw (const vertex&, const rgbcolor&) const override;
@@ -127,6 +127,27 @@ class diamond: public polygon {
    public:
       diamond (const GLfloat width, const GLfloat height);
 };
+
+class triangle: public polygon {
+   public:
+      triangle (const vertex_list& verts);
+};
+
+class right_triangle: public triangle {
+   public:
+      right_triangle (const GLfloat width, const GLfloat height);
+};
+
+class isosceles: public triangle {
+   public:
+      isosceles (const GLfloat width, const GLfloat height);
+};
+
+class equilateral: public triangle {
+   public:
+      equilateral (GLfloat width);
+};
+
 
 ostream& operator<< (ostream& out, const shape&);
 
