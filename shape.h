@@ -52,6 +52,7 @@ class shape {
    public:
       virtual ~shape() {}
       virtual void draw (const vertex&, const rgbcolor&) const = 0;
+      virtual void draw_border(const vertex&, const rgbcolor&);
       virtual void show (ostream&) const;
 };
 
@@ -74,6 +75,7 @@ class text: public shape {
    public:
       text (void* glut_bitmap_font, const string& textdata);
       virtual void draw (const vertex&, const rgbcolor&) const override;
+      virtual void draw_border(const vertex&, const rgbcolor&) override;
       virtual void show (ostream&) const override;
 };
 
@@ -87,13 +89,15 @@ class ellipse: public shape {
    public:
       ellipse (GLfloat width, GLfloat height);
       virtual void draw (const vertex&, const rgbcolor&) const override;
+      virtual void draw_border(const vertex&, const rgbcolor&) override;
       virtual void show (ostream&) const override;
 };
 
 class circle: public ellipse {
    public:
-      circle (GLfloat diameter);
+      circle (GLfloat diameter);;
 };
+
 
 //
 // Class polygon.
@@ -105,6 +109,7 @@ class polygon: public shape {
    public:
       polygon (const vertex_list& vertices);
       virtual void draw (const vertex&, const rgbcolor&) const override;
+      virtual void draw_border(const vertex&, const rgbcolor&) override;
       virtual void show (ostream&) const override;
 };
 
