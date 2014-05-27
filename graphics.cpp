@@ -36,6 +36,40 @@ void window::entry (int mouse_entered) {
 void window::display() {
    glClear (GL_COLOR_BUFFER_BIT);
    for (auto& object: window::objects) object.draw();
+
+   switch(window::objects[window::selected_obj].pshape->get_type()){
+   case("text"): break;
+   case("polygon"):
+
+		   vertex_list vertices;
+
+		   for (auto iter = window::objects[window::selected_obj].pshape->get_vertices().begin()
+				   ; iter != window::objects[window::selected_obj].pshape->get_vertices().end();
+				   ++iter)
+		   {
+		      vertex v;
+		         v.xpos = stof(*iter++);
+		         v.ypos = stof(*iter);
+		         vertices.push_back(v);
+		   }
+
+
+		   glBegin(GL_LINE_LOOP);
+
+		   for(size_t i=0; i<vertices.size(); ++i)
+		   {
+		      glColor3d(1, 1, 1);
+		      glVertex2f(vertices[i].xpos, vertices[i].ypos);
+		   }
+
+
+		   glEnd();
+
+
+      break;
+   case("ellipse"): break;
+   }
+
    mus.draw();
    glutSwapBuffers();
    glFlush();
@@ -66,27 +100,30 @@ void window::keyboard (GLubyte key, int x, int y) {
          window::close();
          break;
       case 'H': case 'h':
-         //move_selected_object (
+    	  move_selected_object (1, 0);
          break;
       case 'J': case 'j':
-         //move_selected_object (
+    	  move_selected_object (0, 1);
          break;
       case 'K': case 'k':
-         //move_selected_object (
+    	  move_selected_object (0, -1);
          break;
       case 'L': case 'l':
-         //move_selected_object (
+    	  move_selected_object (-1, 0);
          break;
       case 'N': case 'n': case SPACE: case TAB:
+    	 select_object (window::selected_obj+1);
          break;
       case 'P': case 'p': case BS:
-         break;
+    	 select_object (window::selected_obj-1);
+    	 break;
       case '0'...'9':
-         //select_object (key - '0');
+         select_object ((unsigned)key - '0');
          break;
       default:
          cerr << (unsigned)key << ": invalid keystroke" << endl;
          break;
+   }
    }
    glutPostRedisplay();
 }
@@ -97,22 +134,22 @@ void window::special (int key, int x, int y) {
    DEBUGF ('g', "key=" << key << ", x=" << x << ", y=" << y);
    window::mus.set (x, y);
    switch (key) {
-      case GLUT_KEY_LEFT: //move_selected_object (-1, 0); break;
-      case GLUT_KEY_DOWN: //move_selected_object (0, -1); break;
-      case GLUT_KEY_UP: //move_selected_object (0, +1); break;
-      case GLUT_KEY_RIGHT: //move_selected_object (+1, 0); break;
-      case GLUT_KEY_F1: //select_object (1); break;
-      case GLUT_KEY_F2: //select_object (2); break;
-      case GLUT_KEY_F3: //select_object (3); break;
-      case GLUT_KEY_F4: //select_object (4); break;
-      case GLUT_KEY_F5: //select_object (5); break;
-      case GLUT_KEY_F6: //select_object (6); break;
-      case GLUT_KEY_F7: //select_object (7); break;
-      case GLUT_KEY_F8: //select_object (8); break;
-      case GLUT_KEY_F9: //select_object (9); break;
-      case GLUT_KEY_F10: //select_object (10); break;
-      case GLUT_KEY_F11: //select_object (11); break;
-      case GLUT_KEY_F12: //select_object (12); break;
+      case GLUT_KEY_LEFT: move_selected_object (-1, 0); break;
+      case GLUT_KEY_DOWN: move_selected_object (0, -1); break;
+      case GLUT_KEY_UP:   move_selected_object (0, 1); break;
+      case GLUT_KEY_RIGHT:move_selected_object (1, 0); break;
+      case GLUT_KEY_F1:   select_object (1); break;
+      case GLUT_KEY_F2:   select_object (2); break;
+      case GLUT_KEY_F3:   select_object (3); break;
+      case GLUT_KEY_F4:   select_object (4); break;
+      case GLUT_KEY_F5:   select_object (5); break;
+      case GLUT_KEY_F6:   select_object (6); break;
+      case GLUT_KEY_F7:   select_object (7); break;
+      case GLUT_KEY_F8:   select_object (8); break;
+      case GLUT_KEY_F9:   select_object (9); break;
+      case GLUT_KEY_F10:  select_object (10); break;
+      case GLUT_KEY_F11:  select_object (11); break;
+      case GLUT_KEY_F12:  select_object (12); break;
       default:
          cerr << (unsigned)key << ": invalid function key" << endl;
          break;
