@@ -89,26 +89,26 @@ shape_ptr interpreter::make_text (param begin, param end) {
 
 shape_ptr interpreter::make_ellipse (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<ellipse> (GLfloat(), GLfloat());
+   auto iter = begin;
+   float width = stof(*iter++);
+   float height = stof(*iter);
+   return make_shared<ellipse> (GLfloat(width), GLfloat(height));
 }
 
 shape_ptr interpreter::make_circle (param begin, param end) {
    DEBUGF ('f', range (begin, end));
-   return make_shared<circle> (GLfloat());
+   return make_shared<circle> (GLfloat(stof(*begin)));
 }
 
 shape_ptr interpreter::make_polygon (param begin, param end) {
    DEBUGF ('f', range (begin, end));
    vertex_list vertices;
-   int count = 1;
-   vertex v;
+
    for (auto iter = begin; iter != end; ++iter){
-      if (count % 2 == 1)
-         v.xpos = stof(*iter);
-      else{
+      vertex v;
+         v.xpos = stof(*iter++);
          v.ypos = stof(*iter);
          vertices.push_back(v);
-      }
    }
 
    return make_shared<polygon> (vertices);
@@ -138,15 +138,12 @@ shape_ptr interpreter::make_diamond (param begin, param end) {
 shape_ptr interpreter::make_triangle (param begin, param end) {
    DEBUGF ('f', range (begin, end));
    vertex_list vertices;
-   int count = 1;
-   vertex v;
+
    for (auto iter = begin; iter != end; ++iter){
-      if (count % 2 == 1)
-         v.xpos = stof(*iter);
-      else{
+      vertex v;
+         v.xpos = stof(*iter++);
          v.ypos = stof(*iter);
          vertices.push_back(v);
-      }
    }
 
    return make_shared<triangle> (vertices);
