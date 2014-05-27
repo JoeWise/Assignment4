@@ -2,11 +2,13 @@
 
 #include <typeinfo>
 #include <unordered_map>
-#include <cmath>
+#include <math.h>
 using namespace std;
 
 #include "shape.h"
 #include "util.h"
+
+const double PI = 3.141592653589793;
 
 static unordered_map<void*,string> fontname {
    {GLUT_BITMAP_8_BY_13       , "Fixed-8x13"    },
@@ -104,14 +106,32 @@ diamond::diamond (GLfloat width, GLfloat height):
    vertices.push_back(v4);
 }
 
-polygon::polygon (const vertex_list& vertices): vertices(vertices) {
+polygon::polygon (const vertex_list& vertices){
    DEBUGF ('c', this);
+   vertex_list adjusted_verticies;
+   int v_count = 0;
+   int x_total = 0;
+   int y_total = 0;
+   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+      v_count++;
+      x_total += iter->xpos;
+      y_total += iter->ypos;
+   }
+   int center_x = x_total/v_count;
+   int center_y = y_total/v_count;
+
+   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+      vertex v;
+      v.xpos = iter->xpos - center_x;
+      v.ypos = iter->ypos - center_y;
+      this->vertices.push_back(v);
+   }
 }
 
-triangle::triangle (const vertex_list& vertices):
+triangle::triangle (const vertex_list& verts):
             polygon({}) {
    DEBUGF ('c', this);
-   this->vertices = vertices;
+   vertices = verts;
 }
 
 right_triangle::right_triangle (GLfloat width, GLfloat height):
@@ -177,6 +197,17 @@ void text::draw (const vertex& center, const rgbcolor& color) const {
 
 void ellipse::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+   glBegin (GL_POLYGON);
+   glEnable (GL_LINE_SMOOTH);
+   glColor3d(color.ubvec[0], color.ubvec[1], color.ubvec[2]);
+   const float delta = 2 * PI / 32;
+   for (float theta = 0; theta < 2 * PI; theta += delta) {
+      float xdraw = dimension.xpos * cos (theta) + center.xpos;
+      float ydraw = dimension.ypos * sin (theta) + center.xpos;
+      glVertex2f (xdraw, ydraw);
+   }
+   glEnd();
+
 }
 
 void polygon::draw (const vertex& center, const rgbcolor& color) const{

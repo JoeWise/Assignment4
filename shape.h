@@ -129,6 +129,8 @@ class diamond: public polygon {
 };
 
 class triangle: public polygon {
+   protected:
+      vertex_list verts;
    public:
       triangle (const vertex_list& verts);
 };
