@@ -100,6 +100,8 @@ class circle: public ellipse {
 //
 
 class polygon: public shape {
+   private:
+      void center();
    protected:
       vertex_list vertices;
    public:
