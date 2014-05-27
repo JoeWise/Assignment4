@@ -53,6 +53,7 @@ class window {
       static vector<object> objects;
       static size_t selected_obj;
       static mouse mus;
+      static object border;
    private:
       static void close();
       static void entry (int mouse_entered);
@@ -69,6 +70,8 @@ class window {
       static void setwidth (int width_) { width = width_; }
       static void setheight (int height_) { height = height_; }
       static void main();
+      static void move_selected_object (float x, float y){ objects[selected_obj].move(x, y); }
+      static void select_object (size_t i){ selected_obj=i; }
 };
 
 #endif
