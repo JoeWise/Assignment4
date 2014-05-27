@@ -86,7 +86,7 @@ shape_ptr interpreter::make_shape (param begin, param end) {
 shape_ptr interpreter::make_text (param begin, param end) {
    DEBUGF ('f', range (begin, end));
    auto iter = begin;
-   shape::fontcode.at(*iter);
+//   shape::fontcode.at(*iter);
    string txt = *iter++;
    for(; iter != end; ++iter){
       txt.append(" " + *iter);
