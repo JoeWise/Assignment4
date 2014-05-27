@@ -112,6 +112,7 @@ triangle::triangle (const vertex_list& vertices):
             polygon({}) {
    DEBUGF ('c', this);
    this->vertices = vertices;
+
 }
 
 right_triangle::right_triangle (GLfloat width, GLfloat height):
