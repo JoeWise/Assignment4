@@ -199,9 +199,9 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
 
 void ellipse::draw_border (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+   glLineWidth(4);
    glBegin (GL_LINE_LOOP);
    glEnable (GL_LINE_SMOOTH);
-   glLineWidth(4);
    glColor3d(1, 0, 0);
    const float delta = 2 * PI / 32;
    for (float theta = 0; theta < 2 * PI; theta += delta) {
