@@ -69,9 +69,6 @@ class window {
       static void setwidth (int width_) { width = width_; }
       static void setheight (int height_) { height = height_; }
       static void main();
-      void move_selected_object(float x, float y);
-      void select_object(size_t i);
-
 };
 
 #endif

@@ -106,26 +106,9 @@ diamond::diamond (GLfloat width, GLfloat height):
    vertices.push_back(v4);
 }
 
-polygon::polygon (const vertex_list& vertices){
+polygon::polygon (const vertex_list& vertices): vertices(vertices){
    DEBUGF ('c', this);
-   vertex_list adjusted_verticies;
-   int v_count = 0;
-   int x_total = 0;
-   int y_total = 0;
-   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
-      v_count++;
-      x_total += iter->xpos;
-      y_total += iter->ypos;
-   }
-   int center_x = x_total/v_count;
-   int center_y = y_total/v_count;
 
-   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
-      vertex v;
-      v.xpos = iter->xpos - center_x;
-      v.ypos = iter->ypos - center_y;
-      this->vertices.push_back(v);
-   }
 }
 
 triangle::triangle (const vertex_list& verts):
