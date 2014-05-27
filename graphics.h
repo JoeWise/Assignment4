@@ -14,15 +14,17 @@ using namespace std;
 
 class object {
    private:
-      shared_ptr<shape> pshape;
-      vertex center;
       rgbcolor color;
+      rgbcolor b_color = rgbcolor("red");
    public:
+      vertex center;
+      shared_ptr<shape> pshape;
       // Default copiers, movers, dtor all OK.
       object(const shared_ptr<shape>& shape, vertex& where,
              rgbcolor color): pshape(shape), center(where),
              color(color) {}
       void draw() { pshape->draw (center, color); }
+      void draw_border() { pshape->draw_border (center, color); }
       void move (GLfloat delta_x, GLfloat delta_y) {
          center.xpos += delta_x;
          center.ypos += delta_y;

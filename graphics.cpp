@@ -35,41 +35,18 @@ void window::entry (int mouse_entered) {
 // Called to display the objects in the window.
 void window::display() {
    glClear (GL_COLOR_BUFFER_BIT);
-   for (auto& object: window::objects) object.draw();
-
-   switch(window::objects[window::selected_obj].pshape->get_type()){
-   case("text"): break;
-   case("polygon"):
-
-		   vertex_list vertices;
-
-		   for (auto iter = window::objects[window::selected_obj].pshape->get_vertices().begin()
-				   ; iter != window::objects[window::selected_obj].pshape->get_vertices().end();
-				   ++iter)
-		   {
-		      vertex v;
-		         v.xpos = stof(*iter++);
-		         v.ypos = stof(*iter);
-		         vertices.push_back(v);
-		   }
-
-
-		   glBegin(GL_LINE_LOOP);
-
-		   for(size_t i=0; i<vertices.size(); ++i)
-		   {
-		      glColor3d(1, 1, 1);
-		      glVertex2f(vertices[i].xpos, vertices[i].ypos);
-		   }
-
-
-		   glEnd();
-
-
-      break;
-   case("ellipse"): break;
+   for (auto& object: window::objects){
+      if (object.center.xpos > window::width)
+         object.center.xpos = 0;
+      if (object.center.xpos < 0)
+         object.center.xpos = window::width;
+      if (object.center.ypos > window::height)
+         object.center.ypos = 0;
+      if (object.center.ypos < 0)
+         object.center.ypos = window::height;
+      object.draw();
    }
-
+   window::objects[window::selected_obj].draw_border();
    mus.draw();
    glutSwapBuffers();
    glFlush();
@@ -123,7 +100,6 @@ void window::keyboard (GLubyte key, int x, int y) {
       default:
          cerr << (unsigned)key << ": invalid keystroke" << endl;
          break;
-   }
    }
    glutPostRedisplay();
 }

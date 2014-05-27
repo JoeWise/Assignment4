@@ -37,7 +37,6 @@ typedef vector<vertex> vertex_list;
 typedef shared_ptr<shape> shape_ptr;
 
 
-
 //
 // Abstract base class for all shapes in this system.
 //
@@ -52,9 +51,9 @@ class shape {
    protected:
       inline shape(); // Only subclass may instantiate.
    public:
-      static unordered_map<string,void*> fontcode;
       virtual ~shape() {}
       virtual void draw (const vertex&, const rgbcolor&) const = 0;
+      virtual void draw_border (const vertex&, const rgbcolor&) const = 0;
       virtual void show (ostream&) const;
       virtual string get_type() const = 0;
 };
@@ -78,8 +77,9 @@ class text: public shape {
    public:
       text (void* glut_bitmap_font, const string& textdata);
       virtual void draw (const vertex&, const rgbcolor&) const override;
+      virtual void draw_border (const vertex&, const rgbcolor&) const override;
       virtual void show (ostream&) const override;
-      virtual string get_type() { return "text"; } override;
+      virtual string get_type() const override { return "text"; }
 };
 
 //
@@ -92,8 +92,9 @@ class ellipse: public shape {
    public:
       ellipse (GLfloat width, GLfloat height);
       virtual void draw (const vertex&, const rgbcolor&) const override;
+      virtual void draw_border (const vertex&, const rgbcolor&) const override;
       virtual void show (ostream&) const override;
-      virtual string get_type() { return "ellipse"; } override;
+      virtual string get_type() const override { return "ellipse"; }
 };
 
 class circle: public ellipse {
@@ -113,8 +114,9 @@ class polygon: public shape {
    public:
       polygon (const vertex_list& vertices);
       virtual void draw (const vertex&, const rgbcolor&) const override;
+      virtual void draw_border (const vertex&, const rgbcolor&) const override;
       virtual void show (ostream&) const override;
-      virtual string get_type() { return "polygon"; } override;
+      virtual string get_type() const override { return "polygon"; }
       vertex_list get_vertices() { return vertices; }
 };
 

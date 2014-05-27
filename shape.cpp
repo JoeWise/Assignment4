@@ -178,6 +178,10 @@ void text::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
 }
 
+void text::draw_border (const vertex& center, const rgbcolor& color) const {
+   DEBUGF ('d', this << "(" << center << "," << color << ")");
+}
+
 void ellipse::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
    glBegin (GL_POLYGON);
@@ -186,7 +190,23 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
    const float delta = 2 * PI / 32;
    for (float theta = 0; theta < 2 * PI; theta += delta) {
       float xdraw = dimension.xpos * cos (theta) + center.xpos;
-      float ydraw = dimension.ypos * sin (theta) + center.xpos;
+      float ydraw = dimension.ypos * sin (theta) + center.ypos;
+      glVertex2f (xdraw, ydraw);
+   }
+   glEnd();
+
+}
+
+void ellipse::draw_border (const vertex& center, const rgbcolor& color) const {
+   DEBUGF ('d', this << "(" << center << "," << color << ")");
+   glBegin (GL_LINE_LOOP);
+   glEnable (GL_LINE_SMOOTH);
+   glLineWidth(4);
+   glColor3d(1, 0, 0);
+   const float delta = 2 * PI / 32;
+   for (float theta = 0; theta < 2 * PI; theta += delta) {
+      float xdraw = dimension.xpos * cos (theta) + center.xpos;
+      float ydraw = dimension.ypos * sin (theta) + center.ypos;
       glVertex2f (xdraw, ydraw);
    }
    glEnd();
@@ -230,6 +250,45 @@ void polygon::draw (const vertex& center, const rgbcolor& color) const{
    glEnd();
 
 }
+
+void polygon::draw_border (const vertex& center, const rgbcolor& color) const{
+   DEBUGF ('d', this << "(" << center << "," << color << ")");
+   vertex_list adjusted_verticies;
+   int v_count = 0;
+   int x_total = 0;
+   int y_total = 0;
+   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+      v_count++;
+      x_total += iter->xpos;
+      y_total += iter->ypos;
+   }
+
+   int center_x = x_total/v_count;
+   int center_y = y_total/v_count;
+
+   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+      vertex v;
+      v.xpos = iter->xpos - center_x;
+      v.ypos = iter->ypos - center_y;
+      adjusted_verticies.push_back(v);
+   }
+
+   //tell GL we're gonna start drawing a polygon
+   glLineWidth(4);
+   glBegin(GL_LINE_LOOP);
+
+   for(size_t i=0; i<adjusted_verticies.size(); ++i)
+   {
+      glColor3d(1, 0, 0);
+      glVertex2f(adjusted_verticies[i].xpos+center.xpos,
+               adjusted_verticies[i].ypos+center.ypos);
+   }
+
+
+   glEnd();
+
+}
+
 
 void shape::show (ostream& out) const {
    out << this << "->" << demangle (*this) << ": ";

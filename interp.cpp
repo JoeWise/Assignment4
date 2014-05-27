@@ -86,12 +86,12 @@ shape_ptr interpreter::make_shape (param begin, param end) {
 shape_ptr interpreter::make_text (param begin, param end) {
    DEBUGF ('f', range (begin, end));
    auto iter = begin;
-   //shape::fontcode.find(*iter);
-   /*string txt = *iter++;
+   shape::fontcode.at(*iter);
+   string txt = *iter++;
    for(; iter != end; ++iter){
       txt.append(" " + *iter);
-   }*/
-   return make_shared<text> (nullptr, string());
+   }
+   return make_shared<text> (nullptr, txt);
 }
 
 shape_ptr interpreter::make_ellipse (param begin, param end) {
