@@ -193,6 +193,8 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
 
 }
 
+void ellipse::draw_border(const vertex& center, const rgbcolor& color)
+
 void polygon::draw (const vertex& center, const rgbcolor& color) const{
    DEBUGF ('d', this << "(" << center << "," << color << ")");
 
