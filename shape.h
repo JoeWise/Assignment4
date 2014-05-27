@@ -36,6 +36,8 @@ typedef struct {GLfloat xpos; GLfloat ypos; } vertex;
 typedef vector<vertex> vertex_list;
 typedef shared_ptr<shape> shape_ptr;
 
+
+
 //
 // Abstract base class for all shapes in this system.
 //
@@ -50,6 +52,7 @@ class shape {
    protected:
       inline shape(); // Only subclass may instantiate.
    public:
+      static unordered_map<string,void*> fontcode;
       virtual ~shape() {}
       virtual void draw (const vertex&, const rgbcolor&) const = 0;
       virtual void show (ostream&) const;

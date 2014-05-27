@@ -32,6 +32,7 @@ map<string,interpreter::factoryfn> interpreter::factory_map {
    {"equilateral", &interpreter::make_equilateral},
 };
 
+
 interpreter::~interpreter() {
    for (const auto& itor: objmap) {
       cout << "objmap[" << itor.first << "] = "
@@ -84,6 +85,12 @@ shape_ptr interpreter::make_shape (param begin, param end) {
 
 shape_ptr interpreter::make_text (param begin, param end) {
    DEBUGF ('f', range (begin, end));
+   auto iter = begin;
+   //shape::fontcode.find(*iter);
+   /*string txt = *iter++;
+   for(; iter != end; ++iter){
+      txt.append(" " + *iter);
+   }*/
    return make_shared<text> (nullptr, string());
 }
 

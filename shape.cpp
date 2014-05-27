@@ -196,15 +196,34 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
 
 void polygon::draw (const vertex& center, const rgbcolor& color) const{
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+   vertex_list adjusted_verticies;
+   int v_count = 0;
+   int x_total = 0;
+   int y_total = 0;
+   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+      v_count++;
+      x_total += iter->xpos;
+      y_total += iter->ypos;
+   }
+
+   int center_x = x_total/v_count;
+   int center_y = y_total/v_count;
+
+   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+      vertex v;
+      v.xpos = iter->xpos - center_x;
+      v.ypos = iter->ypos - center_y;
+      adjusted_verticies.push_back(v);
+   }
 
    //tell GL we're gonna start drawing a polygon
    glBegin(GL_POLYGON);
 
-   for(size_t i=0; i<vertices.size(); ++i)
+   for(size_t i=0; i<adjusted_verticies.size(); ++i)
    {
       glColor3d(color.ubvec[0], color.ubvec[1], color.ubvec[2]);
-      glVertex2f(vertices[i].xpos+center.xpos,
-               vertices[i].ypos+center.ypos);
+      glVertex2f(adjusted_verticies[i].xpos+center.xpos,
+               adjusted_verticies[i].ypos+center.ypos);
    }
 
 
