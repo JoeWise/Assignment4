@@ -46,7 +46,11 @@ void window::display() {
          object.center.ypos = window::height;
       object.draw();
    }
-   window::objects[window::selected_obj].draw_border();
+
+   if(window::selected_obj<0) ++window::selected_obj;
+   else if(window::selected_obj>window::objects.size()) --window::selected_obj;
+   else window::objects[window::selected_obj].draw_border();
+
    mus.draw();
    glutSwapBuffers();
    glFlush();
@@ -72,6 +76,7 @@ enum {BS=8, TAB=9, ESC=27, SPACE=32, DEL=127};
 void window::keyboard (GLubyte key, int x, int y) {
    DEBUGF ('g', "key=" << (unsigned)key << ", x=" << x << ", y=" << y);
    window::mus.set (x, y);
+
    switch (key) {
       case 'Q': case 'q': case ESC:
          window::close();
@@ -101,6 +106,7 @@ void window::keyboard (GLubyte key, int x, int y) {
          cerr << (unsigned)key << ": invalid keystroke" << endl;
          break;
    }
+
    glutPostRedisplay();
 }
 
@@ -109,6 +115,7 @@ void window::keyboard (GLubyte key, int x, int y) {
 void window::special (int key, int x, int y) {
    DEBUGF ('g', "key=" << key << ", x=" << x << ", y=" << y);
    window::mus.set (x, y);
+
    switch (key) {
       case GLUT_KEY_LEFT: move_selected_object (-1, 0); break;
       case GLUT_KEY_DOWN: move_selected_object (0, -1); break;
