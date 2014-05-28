@@ -47,9 +47,12 @@ void window::display() {
       object.draw();
    }
 
-   if(window::selected_obj<0) ++window::selected_obj;
-   else if(window::selected_obj>window::objects.size()) --window::selected_obj;
-   else window::objects[window::selected_obj].draw_border();
+   if(window::selected_obj<0)
+         ++window::selected_obj;
+   else if(window::selected_obj>window::objects.size())
+         --window::selected_obj;
+   else 
+   window::objects[window::selected_obj].draw_border();
 
    mus.draw();
    glutSwapBuffers();
@@ -82,23 +85,23 @@ void window::keyboard (GLubyte key, int x, int y) {
          window::close();
          break;
       case 'H': case 'h':
-    	  move_selected_object (1, 0);
+         move_selected_object (1, 0);
          break;
       case 'J': case 'j':
-    	  move_selected_object (0, 1);
+         move_selected_object (0, 1);
          break;
       case 'K': case 'k':
-    	  move_selected_object (0, -1);
+         move_selected_object (0, -1);
          break;
       case 'L': case 'l':
-    	  move_selected_object (-1, 0);
+         move_selected_object (-1, 0);
          break;
       case 'N': case 'n': case SPACE: case TAB:
-    	 select_object (window::selected_obj+1);
+         select_object (window::selected_obj+1);
          break;
       case 'P': case 'p': case BS:
-    	 select_object (window::selected_obj-1);
-    	 break;
+         select_object (window::selected_obj-1);
+         break;
       case '0'...'9':
          select_object ((unsigned)key - '0');
          break;

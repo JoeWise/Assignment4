@@ -32,6 +32,16 @@ map<string,interpreter::factoryfn> interpreter::factory_map {
    {"equilateral", &interpreter::make_equilateral},
 };
 
+static unordered_map<string,void*> fontcode {
+   {"Fixed-8x13"    , GLUT_BITMAP_8_BY_13       },
+   {"Fixed-9x15"    , GLUT_BITMAP_9_BY_15       },
+   {"Helvetica-10"  , GLUT_BITMAP_HELVETICA_10  },
+   {"Helvetica-12"  , GLUT_BITMAP_HELVETICA_12  },
+   {"Helvetica-18"  , GLUT_BITMAP_HELVETICA_18  },
+   {"Times-Roman-10", GLUT_BITMAP_TIMES_ROMAN_10},
+   {"Times-Roman-24", GLUT_BITMAP_TIMES_ROMAN_24},
+};
+
 
 interpreter::~interpreter() {
    for (const auto& itor: objmap) {
@@ -86,12 +96,12 @@ shape_ptr interpreter::make_shape (param begin, param end) {
 shape_ptr interpreter::make_text (param begin, param end) {
    DEBUGF ('f', range (begin, end));
    auto iter = begin;
-//   shape::fontcode.at(*iter);
+   void* font_to_use = fontcode.at(*iter++);
    string txt = *iter++;
    for(; iter != end; ++iter){
       txt.append(" " + *iter);
    }
-   return make_shared<text> (nullptr, txt);
+   return make_shared<text> (font_to_use, txt);
 }
 
 shape_ptr interpreter::make_ellipse (param begin, param end) {
@@ -161,7 +171,8 @@ shape_ptr interpreter::make_right_triangle (param begin, param end) {
    auto iter = begin;
    float width = stof(*iter++);
    float height = stof(*iter);
-   return make_shared<right_triangle> (GLfloat(width), GLfloat(height));
+   return make_shared<right_triangle>
+          (GLfloat(width), GLfloat(height));
 }
 
 shape_ptr interpreter::make_isosceles (param begin, param end) {

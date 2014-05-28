@@ -72,7 +72,8 @@ class window {
       static void setwidth (int width_) { width = width_; }
       static void setheight (int height_) { height = height_; }
       static void main();
-      static void move_selected_object (float x, float y){ objects[selected_obj].move(x, y); }
+      static void move_selected_object (float x, float y)
+                  { objects[selected_obj].move(x, y); }
       static void select_object (size_t i){ selected_obj=i; }
 };
 

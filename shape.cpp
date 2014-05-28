@@ -42,6 +42,13 @@ shape::shape() {
 text::text (void* glut_bitmap_font, const string& textdata):
       glut_bitmap_font(glut_bitmap_font), textdata(textdata) {
    DEBUGF ('c', this);
+
+   this->text_array = new unsigned char[textdata.length()];
+
+   for(size_t i=0; i< textdata.length(); ++i)
+   {
+      text_array[i]=textdata[i];
+   }
 }
 
 ellipse::ellipse (GLfloat width, GLfloat height):
@@ -176,13 +183,18 @@ equilateral::equilateral (GLfloat width):
 
 void text::draw (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
+   glRasterPos2i(center.xpos-(16*textdata.length()), center.ypos);
+   glColor3d(color.ubvec[0], color.ubvec[1], color.ubvec[2]);
+   glutBitmapString(glut_bitmap_font, text_array);
 }
 
-void text::draw_border (const vertex& center, const rgbcolor& color) const {
+void text::draw_border
+   (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
 }
 
-void ellipse::draw (const vertex& center, const rgbcolor& color) const {
+void ellipse::draw 
+   (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
    glBegin (GL_POLYGON);
    glEnable (GL_LINE_SMOOTH);
@@ -197,7 +209,8 @@ void ellipse::draw (const vertex& center, const rgbcolor& color) const {
 
 }
 
-void ellipse::draw_border (const vertex& center, const rgbcolor& color) const {
+void ellipse::draw_border
+   (const vertex& center, const rgbcolor& color) const {
    DEBUGF ('d', this << "(" << center << "," << color << ")");
    glLineWidth(4);
    glBegin (GL_LINE_LOOP);
@@ -220,7 +233,8 @@ void polygon::draw (const vertex& center, const rgbcolor& color) const{
    int v_count = 0;
    int x_total = 0;
    int y_total = 0;
-   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+   for (auto iter = vertices.cbegin(); 
+      iter != vertices.cend(); ++iter){
       v_count++;
       x_total += iter->xpos;
       y_total += iter->ypos;
@@ -229,7 +243,8 @@ void polygon::draw (const vertex& center, const rgbcolor& color) const{
    int center_x = x_total/v_count;
    int center_y = y_total/v_count;
 
-   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+   for (auto iter = vertices.cbegin();
+      iter != vertices.cend(); ++iter){
       vertex v;
       v.xpos = iter->xpos - center_x;
       v.ypos = iter->ypos - center_y;
@@ -251,13 +266,16 @@ void polygon::draw (const vertex& center, const rgbcolor& color) const{
 
 }
 
-void polygon::draw_border (const vertex& center, const rgbcolor& color) const{
-   DEBUGF ('d', this << "(" << center << "," << color << ")");
+void polygon::draw_border
+   (const vertex& center, const rgbcolor& color) const{
+   DEBUGF ('d', this << "(" << center
+    << "," << color << ")");
    vertex_list adjusted_verticies;
    int v_count = 0;
    int x_total = 0;
    int y_total = 0;
-   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+   for (auto iter = vertices.cbegin();
+      iter != vertices.cend(); ++iter){
       v_count++;
       x_total += iter->xpos;
       y_total += iter->ypos;
@@ -266,7 +284,8 @@ void polygon::draw_border (const vertex& center, const rgbcolor& color) const{
    int center_x = x_total/v_count;
    int center_y = y_total/v_count;
 
-   for (auto iter = vertices.cbegin(); iter != vertices.cend(); ++iter){
+   for (auto iter = vertices.cbegin();
+      iter != vertices.cend(); ++iter){
       vertex v;
       v.xpos = iter->xpos - center_x;
       v.ypos = iter->ypos - center_y;
